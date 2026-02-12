@@ -84,7 +84,7 @@ resource "aws_security_group" "webSg" {
 # EC2 Instance (Ubuntu)
 resource "aws_instance" "server" {
   ami                         = "ami-0261755bbcb8c4a84" # Ubuntu AMI
-  instance_type               = "t2.micro"
+  instance_type               = "t3.micro"
   key_name                    = aws_key_pair.example.key_name
   subnet_id                   = aws_subnet.sub1.id
   vpc_security_group_ids      = [aws_security_group.webSg.id]
@@ -94,30 +94,31 @@ resource "aws_instance" "server" {
     Name = "UbuntuServer"
   }
 
-#   connection {
-#     type        = "ssh"
-#     user        = "ubuntu"                          # ✅ Correct for Ubuntu AMIs
-#     private_key = file("~/.ssh/id_ed25519")             # Path to private key
-#     host        = self.public_ip
-#     timeout     = "2m"
-#   }
+ connection {
+     type        = "ssh"
+     user        = "ubuntu"                          # ✅ Correct for Ubuntu AMIs
+     private_key = file("~/.ssh/id_ed25519")             # Path to private key
+     host        = self.public_ip
+     timeout     = "2m"
+   }
 
-#   provisioner "file" {
-#     source      = "file10"
-#     destination = "/home/ubuntu/file10"
-#   }
+   provisioner "file" {
+     source      = "file10"
+     destination = "/home/ubuntu/file10"
+   }
 
-#   provisioner "remote-exec" {
-#     inline = [
-#       "touch /home/ubuntu/file200",
-#       "echo 'hello from awsdevopsmulticloud' >> /home/ubuntu/file200"
-#     ]
-#   }
-#    provisioner "local-exec" {
-#     command = "touch file500" 
-   
-#  }
+   provisioner "remote-exec" {
+     inline = [
+       "touch /home/ubuntu/file200",
+     "echo 'hello from awsdevopsmulticloud' >> /home/ubuntu/file200"    ]
  }
+  provisioner "local-exec" {
+    command = "touch file500" 
+   
+ }
+ }
+ 
+
 resource "null_resource" "run_script" {
   provisioner "remote-exec" {
     connection {
@@ -135,7 +136,7 @@ resource "null_resource" "run_script" {
     always_run = "${timestamp()}" # Forces rerun every time
   }
 }
-
+ 
 #re-running null_resource depend on timestamp not on content modification.. becuse state file is not tracking inside the content 
 
 
