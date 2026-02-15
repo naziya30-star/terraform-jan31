@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('git ckeckout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/naziya30-star/terraform-jan31.git'
+            }
+        }
+         stage('terraform init') {
+            steps {
+                dir('Day-10-terraform-imoprt') {
+                 sh 'terraform init'
+}
+            }
+        }
+        stage('terraform plan') {
+            steps {
+                dir('Day-10-terraform-imoprt') {
+                 sh 'terraform plan'
+}
+            }
+        }
+        stage('terraform apply') {
+            steps {
+                dir('Day-10-terraform-imoprt') {
+                 sh 'terraform apply -auto-approve'
+}
+            }
+        }
+    }
+}
