@@ -1,0 +1,17 @@
+node {
+    
+    stage('git checkout') {
+        git branch: 'main', url: 'https://github.com/naziya30-star/terraform-jan31.git'
+    }
+    stage('terraform init') {
+        dir('Day-10-datasource'){
+        sh 'terraform init'
+        }
+        }
+    stage('terraform plan') {
+        dir('Day-10-datasource'){
+        sh 'terraform plan'
+        }
+       
+    }
+}
